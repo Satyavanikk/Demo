@@ -1,6 +1,6 @@
-# This is demo workflow
+# This is demo workflow for training
 
-name: CI
+name: CI process
 
 # Controls when the workflow will run
 on:

@@ -1,0 +1,32 @@
+name: "Newman Tests"
+on: 
+  push: 
+     branches: [ main ]
+     
+   jobs:
+     build:
+       runs-on: ubuntu-latest
+       container:
+         image: postman/newman
+      steps: 
+         - uses: actions/checkout@v1
+         - name: Install html
+           run: npm install -g newman-reporter-htmlextra
+         - name: make directory for file
+           run: mkdir -p testResults
+         - name: Run API Test
+           run: newman run -h
+         # Upload the contents of Test Results directory to workspace
+         - name: Output the Run details
+          uses: actions/upload-artifact@v2
+          with: 
+            name: RunReports
+            path: testResults
+         - name: postman
+          uses: addnab/docker-run-action@v3
+          with:
+           username: ${{ secrets.DOCKERHUB_USERNAME }}
+           password: ${{ secrets.DOCKERHUB_TOKEN }}
+           image: postman/newman:latest
+           run: newman run "Weather_postman_collection.json"
+  
